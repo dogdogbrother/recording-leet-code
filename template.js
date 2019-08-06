@@ -1,0 +1,4 @@
+/**
+ * @param {string} 
+ * @return {number}
+ */
