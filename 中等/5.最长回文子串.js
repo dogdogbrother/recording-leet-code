@@ -38,7 +38,7 @@ var longestPalindrome = function(s) {
 
   const expandAroundCenter = (str,left,right)=>{
     // 这个 while 循环有三个条件,全部成立的情况下才是回文,缺一不可.如果是回文的话左侧-1,右侧加1
-    while (left >= 0 && right < str.length() && str.charAt(left) == str.charAt(right)) {
+    while (left >= 0 && right < str.length && str.charAt(left) == str.charAt(right)) {
       left--;
       right++;
     }
@@ -47,7 +47,7 @@ var longestPalindrome = function(s) {
     //也就是-1和+1了,所以本来是加1的操作变成了-1的操作了
     return right - left - 1
   }
-  for (let i = 1; i < s.length-1; i++) {
+  for (let i = 0; i < s.length-1; i++) {
     //这里我定义一个函数,用于返回中心点扩展的回文长度
     let len1 = expandAroundCenter(s,i,i)
     // 这里其实有2个问题,1是为啥要有2个一模一样的函数,2是为啥第一个函数里面i要给2次而下面的给i+1
@@ -57,10 +57,15 @@ var longestPalindrome = function(s) {
     let len = Math.max(len1, len2);
     //这个地方就是更新最长数据,如果找到的回文不是最长的也没啥意义,如果是最长的就更新 tsart和end的位置
     if (len > end -start ) {
-      // -1 的原因我用上面的例子去说, abcddcba 0-7是回文,那么len的长度是8,i的值是4
-      start = i - (len - 1) / 2;
+      // -2 的原因我用上面的例子去说, abcddcba 0-7是回文,那么len的长度是8,i的值是3, start就是 3 - (8-2)/2 = 1
+      // 为啥要减2呢，其实正常来讲-1是对的，-2是为了兼容偶数中心位，那么问题来了，-2的话 奇数中心位置也没问题呢
+      // 这就触及到我的知识盲点了，原来arr[1.5]取到的值是arr[2]。。。。。。。。
+      start = i - (len - 2) / 2;
       end = i + len / 2;
     }
   }    
+  return s.substring(start, end + 1);
 };
-
+console.log(longestPalindrome('eabcdcbawowejd'));
+ 
+// 累了，马拉车哪天再弄吧
